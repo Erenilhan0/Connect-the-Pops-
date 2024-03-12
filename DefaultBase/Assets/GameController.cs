@@ -10,13 +10,14 @@ using UnityEngine.EventSystems;
 public class GameController : MonoBehaviour
 {
     private PointerEventData pointerEventData;
-    
-    [SerializeField] private List<Pop> connectedPieces;
+
+    private List<Pop> connectedPieces = new List<Pop>();
     [SerializeField] private LineRenderer lineRenderer;
-    
+
     private float selectedInstanceID;
 
-    [SerializeField] private Pop popToMerge;
+    [SerializeField] private Pop uiPop;
+
     private void Update()
     {
         if (Input.GetMouseButtonDown(0))
@@ -37,11 +38,11 @@ public class GameController : MonoBehaviour
 
     private void SelectFirstPop()
     {
-        popToMerge.transform.localScale = Vector3.zero;
+        uiPop.transform.localScale = Vector3.zero;
         selectedInstanceID = 0;
         connectedPieces.Clear();
 
-        
+
         var eventData = new PointerEventData(EventSystem.current)
         {
             position = Input.mousePosition
@@ -54,6 +55,7 @@ public class GameController : MonoBehaviour
         var firstPop = results[0].gameObject.GetComponentInParent<Pop>();
         connectedPieces.Add(firstPop);
         selectedInstanceID = results[0].gameObject.GetInstanceID();
+
         SetLineRenderer();
     }
 
@@ -63,31 +65,39 @@ public class GameController : MonoBehaviour
         {
             position = Input.mousePosition
         };
-        
+
         var results = new List<RaycastResult>();
         EventSystem.current.RaycastAll(eventData, results);
 
         if (results.Count(r => r.gameObject.layer == 6) <= 0) return;
-        
+
         var instanceID = results[0].gameObject.GetInstanceID();
 
         if (instanceID == selectedInstanceID) return;
-       
-        selectedInstanceID = instanceID;
 
+        selectedInstanceID = instanceID;
         if (connectedPieces.Count < 1) return;
 
-        var nextPop = results[0].gameObject.GetComponentInParent<Pop>();
+        var selectedPop = results[0].gameObject.GetComponentInParent<Pop>();
         var lastPop = connectedPieces[^1];
 
         if (!CanConnect(new Vector2(lastPop.column, lastPop.row),
-                new Vector2(nextPop.column, nextPop.row))) return;
+                new Vector2(selectedPop.column, selectedPop.row))) return;
 
-        if (nextPop.popLevel != connectedPieces[0].popLevel) return;
+        if (selectedPop.popLevel != connectedPieces[0].popLevel) return;
 
-        if (connectedPieces.Contains(nextPop)) return;
+        if (!connectedPieces.Contains(selectedPop))
+        {
+            connectedPieces.Add(selectedPop);
+        }
+        else if (connectedPieces[^2] == selectedPop)
+        {
+            connectedPieces.Remove(lastPop);
+        }
+        
+        SoundManager.Instance.PlayPopSound(connectedPieces.Count);
 
-        connectedPieces.Add(nextPop);
+        
         SetUIPop();
         SetLinePosition();
     }
@@ -103,8 +113,9 @@ public class GameController : MonoBehaviour
 
     private void SetLineRenderer()
     {
-        lineRenderer.startColor = connectedPieces[0].popColors[connectedPieces[0].popLevel];
-        lineRenderer.endColor = connectedPieces[0].popColors[connectedPieces[0].popLevel];
+        var popColor = connectedPieces[0].GetPopColor();
+        lineRenderer.startColor = popColor;
+        lineRenderer.endColor = lineRenderer.startColor;
     }
 
 
@@ -121,22 +132,28 @@ public class GameController : MonoBehaviour
         lineRenderer.SetPositions(positions);
     }
 
-    public void SetUIPop()
+    private void SetUIPop()
     {
-        if (popToMerge.transform.localScale == Vector3.zero)
+        if (uiPop.transform.localScale == Vector3.zero)
         {
-            popToMerge.transform.DOScale(Vector3.one, .25f);
+            uiPop.transform.DOScale(Vector3.one, .25f);
         }
-        popToMerge.UIPop(GetScoreMultiplier(connectedPieces.Count)+connectedPieces[0].popLevel);
+
+        if (connectedPieces.Count == 1)
+        {
+            uiPop.transform.DOScale(Vector3.zero, .25f);
+        }
+
+        uiPop.UIPop(ScoreMultiplier(connectedPieces.Count) + connectedPieces[0].popLevel);
     }
 
     private void DestroyPops()
     {
-        if(connectedPieces.Count <= 1) return;
-        
-        popToMerge.transform.DOScale(Vector3.zero, .25f);
+        uiPop.transform.DOScale(Vector3.zero, .25f);
 
-        connectedPieces[^1].UpgradeThePiece(GetScoreMultiplier(connectedPieces.Count));
+        if (connectedPieces.Count <= 1) return;
+
+        connectedPieces[^1].UpgradeThePiece(ScoreMultiplier(connectedPieces.Count));
 
         for (int i = 0; i < connectedPieces.Count - 1; i++)
         {
@@ -144,39 +161,21 @@ public class GameController : MonoBehaviour
         }
 
         connectedPieces.Clear();
+
         SetLinePosition();
         StartCoroutine(BoardManager.Instance.DecreaseRow());
     }
 
 
-    private static int GetScoreMultiplier(int connectedPopCount)
+    private static int ScoreMultiplier(int connectedPopCount)
     {
-        if (connectedPopCount < 4)
+        return connectedPopCount switch
         {
-            return 1;
-        }
-        if (connectedPopCount < 6)
-        {
-            return 2;
-        }
-        if (connectedPopCount < 8)
-        {
-            return 3;
-        }
-        if (connectedPopCount < 10)
-        {
-            return 4;
-        }
-
-        if (connectedPopCount <12)
-        {
-            return 5;
-        }
-
-        if (connectedPopCount < 14)
-        {
-            return 6;
-        }
-        return 1;
+            < 4 => 1,
+            < 8 => 2,
+            < 16 => 3,
+            < 32 => 4,
+            _ => 5
+        };
     }
 }

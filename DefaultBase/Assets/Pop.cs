@@ -11,10 +11,12 @@ using Random = UnityEngine.Random;
 
 public class Pop : MonoBehaviour
 {
-    public Image popBg;
-    public TextMeshProUGUI popValueText;
+    [SerializeField] private Image popBg;
+    [SerializeField] private GameObject whiteCircleGo;
     
-    public Color[] popColors;
+    [SerializeField] private TextMeshProUGUI popValueText;
+    
+    [SerializeField] private Color[] popColors;
     public int popLevel;
     
     public int column;
@@ -28,10 +30,7 @@ public class Pop : MonoBehaviour
         
         transform.localScale = Vector3.zero;
         transform.localPosition = BoardManager.Instance.GetPositionFromCoordinate(column, row);
-        
-        // Delete
-        name = "( " + column + ", " + row + " )";
-        
+
         SetPopData();
         SpawnAnimation();
     }
@@ -42,6 +41,13 @@ public class Pop : MonoBehaviour
         
         var popValue = MathF.Pow(2, popLevel);
         popValueText.text = popValue.ToString(CultureInfo.InvariantCulture);
+
+        if (popLevel > 9)
+        {
+            whiteCircleGo.SetActive(true);
+        }
+
+        name = column + " : " + row;
     }
     
     private void SpawnAnimation()
@@ -53,30 +59,30 @@ public class Pop : MonoBehaviour
     {
         popLevel += levelMultiplier;
         transform.DOScale(new Vector3(1.1f, 1.1f, 1.1f), .15f).SetLoops(2, LoopType.Yoyo);
-        UpdateScore(levelMultiplier);
+        UpdateScore();
         SetPopData();
     }
 
 
-    private void UpdateScore(int scoreMultiplier)
+    public Color GetPopColor()
     {
-        var popValue = MathF.Pow(2, popLevel);
-        var scoreIncreaseAmount = popValue;
-        
-        GameManager.I.UpdateScore((int)scoreIncreaseAmount);
+        return popColors[popLevel];
     }
 
-    public void DropThePiece(int dropCount)
+    private void UpdateScore()
+    {
+        var scoreIncreaseAmount = MathF.Pow(2, popLevel);
+        
+        ScoreController.UpdateScore((int)scoreIncreaseAmount);
+    }
+
+    public void DropThePop(int dropCount)
     {
         row -= dropCount;
         var targetRow = BoardManager.Instance.GetPositionFromCoordinate(column, row).y;
-        var dropTime = (float)dropCount/3;
+        var dropTime = (float)dropCount/8;
         transform.DOLocalMoveY(targetRow, dropTime);
         
-        // Delete
-        name = "( " + column + ", " + row + " )";
-
-       
     }
     public void DestroyThis()
     {
@@ -90,6 +96,7 @@ public class Pop : MonoBehaviour
         popBg.color = popColors[level];
         
         var popValue = MathF.Pow(2, level);
+        
         popValueText.text = popValue.ToString(CultureInfo.InvariantCulture);
     }
 }

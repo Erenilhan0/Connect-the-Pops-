@@ -76,8 +76,11 @@ public class BoardManager : MonoBehaviour
                 else if (emptyCellCount > 0)
                 {
                     var pop = allPops[i, j];
+                    
                     RemovePopFromList(pop.column,pop.row);
-                    pop.DropThePiece(emptyCellCount);
+                    
+                    pop.DropThePop(emptyCellCount);
+                    
                     allPops[pop.column,  pop.row] = pop;
                 }
             }

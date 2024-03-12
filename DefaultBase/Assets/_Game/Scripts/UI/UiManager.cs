@@ -54,55 +54,26 @@ public class UiManager : MonoBehaviour
 
     private void Start()
     {
-        GameManager.I.OnGamePhaseChange += OnOnGamePhaseChange;
+        GameManager.Instance.OnGamePhaseChange += OnOnGamePhaseChange;
 
     }
-
-
-
-
-    
-
-
-
-    private void Update()
-    {
- 
-
-        if (GameManager.I.currentGamePhase == GamePhase.Menu &&
-            Input.GetMouseButtonDown(0))
-        {
-            OnClickPlayButton();
-        }
-
-    }
-
-
-
-
-
-
-    
-
-
-
 
 
 
     public void OnClickNextLevel()
     {
-        GameManager.I.OnClickNextLevel();
+        GameManager.Instance.OnClickNextLevel();
     }
 
     public void OnClickRestart()
     {
-        GameManager.I.OnClickRestart();
+        GameManager.Instance.OnClickRestart();
     }
     
 
     public void OnClickPlayButton()
     {
-        GameManager.I.StartLevel();
+        GameManager.Instance.StartLevel();
 
     }
 

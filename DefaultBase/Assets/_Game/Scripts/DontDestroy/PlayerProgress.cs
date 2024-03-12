@@ -6,6 +6,7 @@ using UnityEngine.Serialization;
 [System.Serializable]
 public class PlayerProgress
 {
+    public int score;
     public int currentLevel;
     public List<int> popLevels;
 }
