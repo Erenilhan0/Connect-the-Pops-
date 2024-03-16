@@ -1,39 +1,29 @@
-﻿
-using System;
-using System.Collections;
-using DG.Tweening;
+﻿using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class Ui_EndGame : UiBase
 {
+
+    [SerializeField] private TextMeshProUGUI levelEndText;
     
-    private bool isHidden;
-
-
-
-
-
+    [SerializeField] private string[] levelEndStrings;
     
     
     public override void HideUi()
     {
-        if (isHidden) return;
-        isHidden = true;
-        UiManager.I.OpenCloseBgFade(false);
-        transform.DOScale(0, 0);
+        transform.localScale = Vector3.zero;
     }
-
-
+    
     public override void ShowUi()
     {
-        isHidden = false;
-
-        transform.DOScale(1, 0);
-
-
-
+        var randomText = levelEndStrings[Random.Range(0, levelEndStrings.Length)];
+        
+        levelEndText.text = randomText;
+        
+        transform.localScale = Vector3.one;
     }
     
     

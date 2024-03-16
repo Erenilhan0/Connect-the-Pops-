@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: 2de689162035b164a8df1fc276912ff6
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Rabie W05
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 54b2ec22e2b026a43a7915d60a6e2993, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

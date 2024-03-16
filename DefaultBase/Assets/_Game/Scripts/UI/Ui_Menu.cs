@@ -7,16 +7,14 @@ public class Ui_Menu : UiBase
 {
     public override void HideUi()
     {
-        transform.DOScale(0, 0);
+        transform.localScale = Vector3.zero;
+
     }
-
-
+    
     public override void ShowUi()
     {
-        transform.DOScale(1, .4f);
+        transform.localScale = Vector3.one;
     }
-    
-    
     
     
 }

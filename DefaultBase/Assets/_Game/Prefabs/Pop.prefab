@@ -127,28 +127,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b36c6892b1ee4924a8d93a38cb28b107, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PopData:
+    Column: 0
+    Row: 0
+    PopLevel: 0
   popBg: {fileID: 3030023602294437236}
-  whiteCircleGO: {fileID: 408271379}
+  whiteCircleGo: {fileID: 408271379}
   popValueText: {fileID: 5323901574572447498}
   popColors:
-  - {r: 0.909804, g: 0.4039216, b: 0.5568628, a: 1}
+  - {r: 0.909804, g: 0.4039216, b: 0.56078434, a: 1}
   - {r: 0.8862746, g: 0.34509805, b: 0.23137257, a: 1}
-  - {r: 0.9960785, g: 0.73333335, b: 0.18039216, a: 1}
-  - {r: 0.90196085, g: 0.5058824, b: 0.227451, a: 1}
+  - {r: 0.9960785, g: 0.73333335, b: 0.18823531, a: 1}
+  - {r: 0.8980393, g: 0.5058824, b: 0.227451, a: 1}
   - {r: 0.45098042, g: 0.7960785, b: 0.31764707, a: 1}
   - {r: 0.3019608, g: 0.8196079, b: 0.64705884, a: 1}
   - {r: 0.40784317, g: 0.7411765, b: 0.91372555, a: 1}
   - {r: 0.25787643, g: 0.3834535, b: 0.8962264, a: 1}
   - {r: 0.4901961, g: 0.33333334, b: 0.48627454, a: 1}
   - {r: 0.6171562, g: 0.23148806, b: 0.9622642, a: 1}
-  - {r: 0.9333334, g: 0.5921569, b: 0.40000004, a: 1}
-  - {r: 0.9333334, g: 0.5921569, b: 0.40000004, a: 1}
-  - {r: 0.9333334, g: 0.5921569, b: 0.40000004, a: 1}
-  - {r: 0.9333334, g: 0.5921569, b: 0.40000004, a: 1}
-  - {r: 0.9333334, g: 0.5921569, b: 0.40000004, a: 1}
-  popLevel: 0
-  column: 0
-  row: 0
+  - {r: 0.9098039, g: 0.40392157, b: 0.56078434, a: 1}
+  - {r: 0.8862745, g: 0.34509805, b: 0.23137255, a: 1}
+  - {r: 0.99607843, g: 0.73333335, b: 0.1882353, a: 1}
+  - {r: 0.8980392, g: 0.5058824, b: 0.22745098, a: 1}
+  - {r: 0.4509804, g: 0.79607844, b: 0.31764707, a: 1}
+  - {r: 0.3019608, g: 0.81960785, b: 0.64705884, a: 1}
+  - {r: 0.40784314, g: 0.7411765, b: 0.9137255, a: 1}
+  - {r: 0.25882354, g: 0.38431373, b: 0.8980392, a: 1}
+  - {r: 0.6156863, g: 0.23137255, b: 0.9607843, a: 1}
 --- !u!1 &5299649673868734065
 GameObject:
   m_ObjectHideFlags: 0
@@ -209,7 +214,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.6981132, g: 0.2799039, b: 0.5338949, a: 1}
+  m_Color: {r: 0.9098039, g: 0.40392157, b: 0.56078434, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -261,8 +266,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 41.7971, y: 41.765}
+  m_AnchoredPosition: {x: 0.12, y: 4.5}
+  m_SizeDelta: {x: 36.91, y: 33.64}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1919194542196089001
 CanvasRenderer:
@@ -294,8 +299,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 2
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: c1482dbce654844b9ba1c753cbea5d80, type: 2}
-  m_sharedMaterial: {fileID: 7374927986402738804, guid: c1482dbce654844b9ba1c753cbea5d80,
+  m_fontAsset: {fileID: 11400000, guid: 36387f6a4aeb2bc47bcc965e659aa0d6, type: 2}
+  m_sharedMaterial: {fileID: -2397610557266372897, guid: 36387f6a4aeb2bc47bcc965e659aa0d6,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -320,12 +325,12 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 28.19
+  m_fontSize: 32.12
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
-  m_fontSizeMin: 18
-  m_fontSizeMax: 28.19
+  m_fontSizeMin: 8
+  m_fontSizeMax: 32.12
   m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512

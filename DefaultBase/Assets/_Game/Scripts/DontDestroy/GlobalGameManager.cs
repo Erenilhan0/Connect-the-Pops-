@@ -6,18 +6,10 @@ using UnityEngine.SceneManagement;
 
 public class GlobalGameManager : MonoBehaviour
 {
-
-    public static GlobalGameManager I;
-    public int currentLevel =>SaveLoad.I.playerProgress.currentLevel;
-
-    private void Awake()
-    {
-        I = this;
-    }
-
+    
     private void Start()
     {
-
+        Application.targetFrameRate = 60;
         if (SceneManager.GetActiveScene().buildIndex == 0)
         {
             SceneManager.LoadScene(1);
