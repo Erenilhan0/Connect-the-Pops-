@@ -12,11 +12,11 @@ public static class ScoreController
     }
     
     
-    public static void UpdateScore(int updateAmount,int connectedPopCount)
+    public static int UpdateScore(int updateAmount)
     {
         Score += updateAmount;
-        UiManager.Instance.UpdateScore(Score,connectedPopCount);
         SaveLoad.I.SaveToJson();
+        return Score;
     }
     
     

@@ -11,6 +11,7 @@ public class UiManager : MonoBehaviour
     public static UiManager Instance;
     [SerializeField] private UiBase[] uis;
 
+    public event Action <int,int> OnScoreUpdate ;
 
     private void Awake()
     {
@@ -47,10 +48,10 @@ public class UiManager : MonoBehaviour
         GameManager.Instance.StartLevel();
     }
 
-
-    public void UpdateScore(int score, int connectedCount)
+    public void UpdateScore(int scoreUpdateAmount, int connectedPop)
     {
-       uis[1].UpdateScoreUI(score,connectedCount);
+        OnScoreUpdate?.Invoke(scoreUpdateAmount,connectedPop);
     }
+    
 
 }

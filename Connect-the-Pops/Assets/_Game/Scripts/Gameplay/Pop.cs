@@ -77,15 +77,12 @@ public class Pop : MonoBehaviour
             popValueText.text = popValue.ToString(CultureInfo.InvariantCulture);
         }
 
-        if (PopData.PopLevel > 9)
-        {
-            whiteCircleGo.SetActive(true);
-        }
+        whiteCircleGo.SetActive(PopData.PopLevel > 9);
     }
 
     private void SpawnAnimation()
     {
-        transform.DOScale(Vector3.one, 0.2f).SetDelay(.15f);
+        transform.DOScale(new Vector3(3,3,3), 0.2f).SetDelay(.15f);
     }
 
     public IEnumerator UpgradeThePop(int levelMultiplier, int connectedPopCount)
@@ -117,7 +114,8 @@ public class Pop : MonoBehaviour
 
         var scoreIncreaseAmount = MathF.Pow(2, PopData.PopLevel);
 
-        ScoreController.UpdateScore((int)scoreIncreaseAmount, connectedPopCount);
+        UiManager.Instance.UpdateScore((int)scoreIncreaseAmount,connectedPopCount);;
+
     }
 
     public void DropThePop(int dropCount)
@@ -135,7 +133,11 @@ public class Pop : MonoBehaviour
     {
         BoardManager.Instance.RemovePopFromList(PopData.Column, PopData.Row);
 
-        transform.DOLocalMove(mergePosition, .18f).OnComplete((() => Destroy(gameObject)));
+        transform.DOLocalMove(mergePosition, .18f).OnComplete((() =>
+        {
+            BoardManager.Instance.popsInPool.Add(this);
+            transform.localScale = Vector3.zero;
+        }));
     }
 
 

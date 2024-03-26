@@ -14,9 +14,9 @@ public class BoardManager : MonoBehaviour
     public int BoardWidth;
     public int BoardHeight;
 
-    private float _offset = 60;
+    private float _offset = 180;
 
-    private Vector3 _startPos = new(-120, -140, 0);
+    private Vector3 _startPos = new(-360, -355, 0);
 
     private bool _availableMove;
 
@@ -25,6 +25,9 @@ public class BoardManager : MonoBehaviour
     [SerializeField] private Pop popPrefab;
 
     private Pop[,] allPops;
+
+    [HideInInspector]
+    public List<Pop> popsInPool;
 
     private void Awake()
     {
@@ -104,7 +107,11 @@ public class BoardManager : MonoBehaviour
     private void PopSpawn(int column, int row, int popLevel, bool randomSpawn, bool smartRefill)
     {
         var pop = Instantiate(popPrefab, transform);
+        PopInit(pop, column, row, popLevel, randomSpawn, smartRefill);
+    }
 
+    private void PopInit(Pop pop, int column, int row, int popLevel, bool randomSpawn, bool smartRefill)
+    {
         allPops[column, row] = pop;
 
         pop.Init(column, row, popLevel, randomSpawn, smartRefill);
@@ -190,25 +197,30 @@ public class BoardManager : MonoBehaviour
         FindAvailableMoves();
 
         var smartRefillCount = 0;
-
+        var spawnCount = 0;
         for (int i = 0; i < BoardWidth; i++)
         {
             for (int j = 0; j < BoardHeight; j++)
             {
                 if (allPops[i, j] != null) continue;
+                
+                var popFromPool = popsInPool[spawnCount];
 
                 if (j == 4 && smartRefillCount == 0 && !_availableMove)
                 {
                     smartRefillCount++;
-
-                    PopSpawn(i, j, 0, true, true);
+                    spawnCount++;
+                    PopInit(popFromPool, i, j, 0, true, true);
                 }
                 else
                 {
-                    PopSpawn(i, j, 0, true, false);
+                    spawnCount++;
+                    PopInit(popFromPool, i, j, 0, true, false);
                 }
             }
         }
+
+        popsInPool.Clear();
     }
 
     private void FindAvailableMoves()
@@ -218,7 +230,7 @@ public class BoardManager : MonoBehaviour
             for (int j = 0; j < BoardHeight; j++)
             {
                 if (allPops[i, j] == null) continue;
-                
+
                 if (AvailablePop(allPops[i, j]))
                 {
                     return;
@@ -249,9 +261,9 @@ public class BoardManager : MonoBehaviour
                 {
                     popInRange = allPops[column + i, row + j];
                 }
-                
+
                 if (popInRange == null) continue;
-                
+
                 if (popInRange == pop || popInRange.PopData.PopLevel != pop.PopData.PopLevel) continue;
 
                 _availableMove = true;
